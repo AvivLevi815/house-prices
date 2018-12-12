@@ -27,19 +27,23 @@ def feature_to_boolean_tuple(df, feature_name, new_name):
 
 # mission specific data engineering.
 def prepare_data(df):
+    df.drop(['MSZoning', 'BldgType', 'Foundation'
+                , 'Neighborhood' , 'HouseStyle', 'RoofStyle'
+                , 'RoofMatl' , 'MasVnrType', 'Fence'
+                , 'Heating', 'GarageType' ], axis=1, inplace=True)
 
     # converting indecisive feature values into option vectors.
-    feature_to_boolean_tuple(df, 'MSZoning', 'MSZoningV')
-    feature_to_boolean_tuple(df, 'BldgType', 'BldgTypeV')
-    feature_to_boolean_tuple(df, 'Foundation', 'FoundationV')
-    feature_to_boolean_tuple(df, 'Neighborhood', 'NeighborhoodV')
-    feature_to_boolean_tuple(df, 'HouseStyle', 'HouseStyleV')
-    feature_to_boolean_tuple(df, 'RoofStyle', 'RoofStyleV')
-    feature_to_boolean_tuple(df, 'RoofMatl', 'RoofMatlV')
-    feature_to_boolean_tuple(df, 'MasVnrType', 'MasVnrTypeV')
-    feature_to_boolean_tuple(df, 'Fence', 'FenceV')
-    feature_to_boolean_tuple(df, 'Heating', 'HeatingV')
-    feature_to_boolean_tuple(df, 'GarageType', 'GarageTypeV')
+    # feature_to_boolean_tuple(df, 'MSZoning', 'MSZoningV')
+    # feature_to_boolean_tuple(df, 'BldgType', 'BldgTypeV')
+    # feature_to_boolean_tuple(df, 'Foundation', 'FoundationV')
+    # feature_to_boolean_tuple(df, 'Neighborhood', 'NeighborhoodV')
+    # feature_to_boolean_tuple(df, 'HouseStyle', 'HouseStyleV')
+    # feature_to_boolean_tuple(df, 'RoofStyle', 'RoofStyleV')
+    # feature_to_boolean_tuple(df, 'RoofMatl', 'RoofMatlV')
+    # feature_to_boolean_tuple(df, 'MasVnrType', 'MasVnrTypeV')
+    # feature_to_boolean_tuple(df, 'Fence', 'FenceV')
+    # feature_to_boolean_tuple(df, 'Heating', 'HeatingV')
+    # feature_to_boolean_tuple(df, 'GarageType', 'GarageTypeV')
 
     """
     Dictonary mapping - 
@@ -119,6 +123,11 @@ def prepare_data(df):
 
     df["baths"] = df['FullBath'] + df['HalfBath']
 
+    FireplaceQu_mapping = {'Ex': 5, 'Gd': 4, 'TA': 3,
+                           'Fa': 2, 'Po': 1, 'NA': 0}
+
+    df["FireplaceQu"] = df.replace({'FireplaceQu': FireplaceQu_mapping})["FireplaceQu"]
+
     df["fire_places_grade"] = df["Fireplaces"] * df['FireplaceQu']
 
     PoolQC_mapping = {'Ex': 4, 'Gd': 3, 'TA': 2,
@@ -150,11 +159,13 @@ def prepare_data(df):
                           'Fa': 2, 'Po': 1, 'NA': 0}
     df["GarageCond"] = df.replace({'GarageCond': GarageCond_mapping})["GarageCond"]
 
-    df["Garage_Grade"] = df["GarageArea"] * (df["GarageCond"]
-                                                         + df["GarageQual"]
-                                                         + df["GarageFinish"]
-                                                         - (df["YrSold"] - df["GarageYrBlt"])
-                                                         )
+
+
+    df["Garage_Grade"] = df["GarageArea"] *  (df["GarageCond"] +
+                                              df["GarageQual"] +
+                                              df["GarageFinish"])
+
+    df["Garage_age"] = df["YrSold"] - df["GarageYrBlt"]
 
     KitchenQual_mapping = GarageCond_mapping
     df["KitchenQual"] = df.replace({'KitchenQual': KitchenQual_mapping})["KitchenQual"]
