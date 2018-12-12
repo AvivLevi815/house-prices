@@ -1,50 +1,13 @@
-"""
-the goal of this function is to convert a feature that I am interested in and have values that
-I cannot sort by myselfe by effect (for example - what is better, Heating of type 1 or 2?)
-into a tuple at the size of the feature possible values.
-
-for example for feature "Example" that have the following possible values {red, white, blue}
-and the data set { red, red, white }
-the feature in the data set will be converted to:
-[(1, 0, 0), (1, 0, 0), (0, 0, 1)]
-"""
-def feature_to_boolean_tuple(df, feature_name, new_name):
-    tuple_list = [] #each tuple will represent an option
-    feature_options = df[feature_name].unique()
-    feature_options_length = len(feature_options)
-
-    # creating a list the size of feature_options_length, all 0's
-    list_to_be_tuple = [0 for i in range(feature_options_length)]
-
-    for i in range(feature_options_length):
-        list_to_be_tuple[i] = 1 # inserting 1 representing option number i
-        tuple_list.append(tuple(list_to_be_tuple))
-        list_to_be_tuple[i] = 0
-
-    mapping = dict(zip(feature_options, tuple_list)) # dict from values to vectors
-    df[new_name] = df[feature_name].map(mapping)
-    df.drop([feature_name], axis=1, inplace=True)
+import  pandas as pd
 
 # mission specific data engineering.
 def prepare_data(df):
-    df.drop(['MSZoning', 'BldgType', 'Foundation'
-                , 'Neighborhood' , 'HouseStyle', 'RoofStyle'
-                , 'RoofMatl' , 'MasVnrType', 'Fence'
-                , 'Heating', 'GarageType' ], axis=1, inplace=True)
-
-    # converting indecisive feature values into option vectors.
-    # feature_to_boolean_tuple(df, 'MSZoning', 'MSZoningV')
-    # feature_to_boolean_tuple(df, 'BldgType', 'BldgTypeV')
-    # feature_to_boolean_tuple(df, 'Foundation', 'FoundationV')
-    # feature_to_boolean_tuple(df, 'Neighborhood', 'NeighborhoodV')
-    # feature_to_boolean_tuple(df, 'HouseStyle', 'HouseStyleV')
-    # feature_to_boolean_tuple(df, 'RoofStyle', 'RoofStyleV')
-    # feature_to_boolean_tuple(df, 'RoofMatl', 'RoofMatlV')
-    # feature_to_boolean_tuple(df, 'MasVnrType', 'MasVnrTypeV')
-    # feature_to_boolean_tuple(df, 'Fence', 'FenceV')
-    # feature_to_boolean_tuple(df, 'Heating', 'HeatingV')
-    # feature_to_boolean_tuple(df, 'GarageType', 'GarageTypeV')
-
+    
+    cols_to_transform = ['MSZoning', 'BldgType', 'Foundation',
+                         'Neighborhood', 'HouseStyle', 'RoofStyle',
+                         'RoofStyle', 'RoofMatl', 'MasVnrType', 'Fence',
+                         'Heating', 'GarageType']
+    df = pd.get_dummies(df, columns=cols_to_transform)
     """
     Dictonary mapping - 
     Features for which I know (or hope to know) the better or worse options.
