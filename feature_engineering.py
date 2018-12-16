@@ -10,11 +10,11 @@ def add_missing_dummy_columns(train_df ,test_df):
 # mission specific data engineering.
 def prepare_data(df):
 
-    cols_to_transform = ['MSZoning', 'BldgType', 'Foundation',
-                         'Neighborhood', 'HouseStyle', 'RoofStyle',
-                         'RoofStyle', 'RoofMatl', 'MasVnrType', 'Fence',
-                         'Heating', 'GarageType']
-    df = pd.get_dummies(df, columns=cols_to_transform)
+    # cols_to_transform = ['MSZoning', 'BldgType', 'Foundation',
+    #                      'Neighborhood', 'HouseStyle', 'RoofStyle',
+    #                      'RoofStyle', 'RoofMatl', 'MasVnrType', 'Fence',
+    #                      'Heating', 'GarageType']
+    # df = pd.get_dummies(df, columns=cols_to_transform)
     """
     Dictonary mapping - 
     Features for which I know (or hope to know) the better or worse options.
@@ -155,5 +155,9 @@ def prepare_data(df):
                    'Exterior1st', 'Exterior2nd', 'Electrical', 'GarageCars',
                    'OpenPorchSF', 'MiscFeature', 'MoSold', 'SaleType', 'SaleCondition',
                    'KitchenQual', 'KitchenAbvGr', 'Fireplaces', 'FireplaceQu',
+                   'MSZoning', 'BldgType', 'Foundation',
+                   'Neighborhood', 'HouseStyle', 'RoofStyle',
+                   'RoofStyle', 'RoofMatl', 'MasVnrType', 'Fence',
+                   'Heating', 'GarageType',
                    'WoodDeckSF', 'Condition1', 'Condition2', 'FullBath', 'HalfBath'], axis=1, inplace=True)
     return df
