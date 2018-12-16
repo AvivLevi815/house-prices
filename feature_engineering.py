@@ -1,8 +1,15 @@
 import  pandas as pd
 
+
+def add_missing_dummy_columns(train_df ,test_df):
+    missing_cols = set( train_df ) - set( test_df.columns )
+    for c in missing_cols:
+        test_df[c] = 0
+
+
 # mission specific data engineering.
 def prepare_data(df):
-    
+
     cols_to_transform = ['MSZoning', 'BldgType', 'Foundation',
                          'Neighborhood', 'HouseStyle', 'RoofStyle',
                          'RoofStyle', 'RoofMatl', 'MasVnrType', 'Fence',

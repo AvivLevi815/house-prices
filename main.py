@@ -22,12 +22,32 @@ test_df = feature_engineering.prepare_data(test_df)
 # replace NaN values with column mean
 
 train_df = train_df.replace(np.nan, train_df.mean(), regex=True)
-test_df = test_df.replace(np.nan, train_df.mean(), regex=True)
+test_df = test_df.replace(np.nan, test_df.mean(), regex=True)
 
+
+# fixing value dieffrences after one-hot encoding.
+feature_engineering.add_missing_dummy_columns(train_df, test_df)
 
 # train model
 
 linereg = LinearRegression()
 linereg.fit(train_df, target)
+
+train_L = list(train_df)
+test_L = list(test_df)
+# print (train_L)
+# print (test_L)
+
+# print ("missing in test")
+# for train in train_L:
+#     if train not in test_L:
+#         print (train)
+#
+# print ("missing in train")
+# for test in test_L:
+#     if test not in train_L:
+#         print (test)
+
+prediction = linereg.predict(test_df)
 
 
