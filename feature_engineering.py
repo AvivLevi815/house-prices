@@ -1,6 +1,7 @@
-import  pandas as pd
+import numpy as np
 
 
+# fixing value dieffrences after one-hot encoding.
 def add_missing_dummy_columns(train_df ,test_df):
     missing_cols = set( train_df ) - set( test_df.columns )
     for c in missing_cols:
@@ -10,15 +11,33 @@ def add_missing_dummy_columns(train_df ,test_df):
 # mission specific data engineering.
 def prepare_data(df):
 
+    """
+    Dealing with missing values - for all the features that I use here, if there is a null value
+    it might be meaningful - not just denoting there is nothing to say of the feature.
+    i.e. null for pool means "no pool".
+    """
+
+    df["PoolQC"] = df["PoolQC"].replace(np.nan, 0, regex=True)
+    df["LotFrontage"] = df["LotFrontage"].replace(np.nan, 0, regex=True)
+    df["LotArea"] = df["LotFrontage"].replace(np.nan, 0, regex=True)
+    df["BsmtExposure"] = df["BsmtExposure"].replace(np.nan, 0, regex=True)
+
+    # most common for all else :
+    #df.mode - retunrns the most frequent value.
+
+    df = df.replace(np.nan, df.mode().iloc[0])
+
     # cols_to_transform = ['MSZoning', 'BldgType', 'Foundation',
     #                      'Neighborhood', 'HouseStyle', 'RoofStyle',
-    #                      'RoofStyle', 'RoofMatl', 'MasVnrType', 'Fence',
+    #                      'RoofStyle', 'RoofMatl', 'MasVnrType',
     #                      'Heating', 'GarageType']
     # df = pd.get_dummies(df, columns=cols_to_transform)
+
     """
-    Dictonary mapping - 
+    Dictionary mapping - 
     Features for which I know (or hope to know) the better or worse options.
     """
+
     LandSlope_mapping = {'Gtl': 3, 'Mod': 2, 'Sev': 1}
     df = df.replace({'LandSlope': LandSlope_mapping})
 
@@ -43,21 +62,32 @@ def prepare_data(df):
                        'PosA': 0, 'RRNe': 0, 'RRAe': 0}
 
     df["nearNSR"] = df.replace({'Condition1': nearNSR_mapping})["Condition1"]
-    df["nearNSR2"] = df.replace({'Condition2': nearNSR_mapping})["Condition2"]
+
+
+
+    Alley_mapping = {'Pave': 2, 'Grvl' : 1, 'NA': 0}
+    df["Alley"] = df.replace({'Alley': Alley_mapping})["Alley"]
+
+    Fence_mapping = {'GdPrv': 5, 'Good': 4, 'MnPrv': 3,
+                     'GdWo' : 2, 'MnWw': 1,'NA': 0}
+
+    df["Fence"] = df.replace({'Fence': Fence_mapping})["Fence"]
+
+    #df["nearNSR2"] = df.replace({'Condition2': nearNSR_mapping})["Condition2"]
 
     posOS_mapping = {'Artery': 0, 'Feedr': 0, 'Norm': 0,
                      'RRNn': 0, 'RRAn': 0, 'PosN': 1,
                      'PosA': 2, 'RRNe': 0, 'RRAe': 0}
 
     df["posOS"] = df.replace({'Condition1': posOS_mapping})["Condition1"]
-    df["posOS2"] = df.replace({'Condition2': posOS_mapping})["Condition2"]
+    #df["posOS2"] = df.replace({'Condition2': posOS_mapping})["Condition2"]
 
     nearEWR_mapping = {'Artery': 0, 'Feedr': 0, 'Norm': 0,
                        'RRNn': 0, 'RRAn': 0, 'PosN': 0,
                        'PosA': 0, 'RRNe': 1, 'RRAe': 2}
 
     df["nearEWR"] = df.replace({'Condition1': nearEWR_mapping})["Condition1"]
-    df["nearEWR2"] = df.replace({'Condition2': nearEWR_mapping})["Condition2"]
+    #df["nearEWR2"] = df.replace({'Condition2': nearEWR_mapping})["Condition2"]
 
     Functional_mapping = {'Typ': 8, 'Min1': 7, 'Min2': 6,
                           'Mod': 5, 'Maj1': 4, 'Maj2': 3,
@@ -68,6 +98,22 @@ def prepare_data(df):
     df["age"] = df["YrSold"] - df["YearBuilt"]
 
     # df["roof"] = df["RoofStyle"]
+
+    BsmtFinType1_mapping = {'GLQ': 6,  'ALQ': 5, 'BLQ': 4,
+                            'Rec': 3,  'LwQ': 2, 'Unf': 1,
+                            'NA' : 0}
+
+    BsmtFinType2_mapping = BsmtFinType1_mapping
+
+    df["BsmtFinType1"] = df.replace({'BsmtFinType1': BsmtFinType1_mapping})["BsmtFinType1"]
+    df["BsmtFinType2"] = df.replace({'BsmtFinType2': BsmtFinType2_mapping})["BsmtFinType2"]
+
+    df["basement_finish_grade"] = df["BsmtFinType1"] * df["BsmtFinSF1"] + \
+                                  df["BsmtFinType2"] * df["BsmtFinSF2"] - df["BsmtUnfSF"] - \
+                                  df["BsmtUnfSF"]
+
+
+
 
     BsmtCond_mapping = {'Ex': 5, 'Gd': 4, 'TA': 3,
                         'Fa': 2, 'Po': 1, 'NA': 0}
@@ -98,6 +144,9 @@ def prepare_data(df):
 
     df["FireplaceQu"] = df.replace({'FireplaceQu': FireplaceQu_mapping})["FireplaceQu"]
 
+    LandContour_mapping = {'Lvl': 4, 'Bnk': 2, 'HLS': 1, 'Low': 1}
+    df["LandContour"] = df.replace({'LandContour' : LandContour_mapping})["LandContour"]
+
     df["fire_places_grade"] = df["Fireplaces"] * df['FireplaceQu']
 
     PoolQC_mapping = {'Ex': 4, 'Gd': 3, 'TA': 2,
@@ -110,6 +159,9 @@ def prepare_data(df):
 
     df["Porches_area"] = df["EnclosedPorch"] + df["3SsnPorch"] + \
                                df["ScreenPorch"] + df["OpenPorchSF"]
+
+    Street_mapping = {'Pave': 2, 'Grvl': 1, 'NA': 0}
+    df["Street"] = df.replace({'Street': Street_mapping})["Street"]
 
     PavedDrive_mapping = {'Y': 2, 'P': 1, 'N': 0}
     df["PavedDrive"] = df.replace({'PavedDrive': PavedDrive_mapping})["PavedDrive"]
@@ -148,16 +200,16 @@ def prepare_data(df):
                    'OverallQual', 'PoolArea', 'PoolQC', 'BsmtCond', 'TotalBsmtSF',
                    'BsmtQual', 'YearRemodAdd', 'BsmtFinType2', 'BsmtFinSF2',
                    '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'YrSold','MasVnrArea','ExterQual',
-                   'ExterCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinSF1', 'BsmtUnfSF',
-                   'YearBuilt', 'MSSubClass', 'LotFrontage', 'LotArea', 'Street', 'Alley',
-                   'LotShape', 'LandContour', 'Utilities', 'LotConfig', 'BedroomAbvGr',
+                   'ExterCond', 'BsmtExposure', 'BsmtFinSF1', 'BsmtUnfSF',
+                   'YearBuilt', 'MSSubClass', 'LotFrontage', 'LotArea',
+                   'LotShape', 'Utilities', 'LotConfig', 'BedroomAbvGr',
                    'CentralAir', 'LowQualFinSF', 'BsmtFullBath', 'BsmtHalfBath',
                    'Exterior1st', 'Exterior2nd', 'Electrical', 'GarageCars',
                    'OpenPorchSF', 'MiscFeature', 'MoSold', 'SaleType', 'SaleCondition',
                    'KitchenQual', 'KitchenAbvGr', 'Fireplaces', 'FireplaceQu',
                    'MSZoning', 'BldgType', 'Foundation',
                    'Neighborhood', 'HouseStyle', 'RoofStyle',
-                   'RoofStyle', 'RoofMatl', 'MasVnrType', 'Fence',
+                   'RoofStyle', 'RoofMatl', 'MasVnrType',
                    'Heating', 'GarageType',
                    'WoodDeckSF', 'Condition1', 'Condition2', 'FullBath', 'HalfBath'], axis=1, inplace=True)
     return df
