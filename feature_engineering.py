@@ -68,8 +68,8 @@ def prepare_data(df):
     Alley_mapping = {'Pave': 2, 'Grvl' : 1, 'NA': 0}
     df["Alley"] = df.replace({'Alley': Alley_mapping})["Alley"]
 
-    Fence_mapping = {'GdPrv': 5, 'Good': 4, 'MnPrv': 3,
-                     'GdWo' : 2, 'MnWw': 1,'NA': 0}
+    Fence_mapping = {'GdPrv': 3, 'Good': 3, 'MnPrv': 2,
+                     'GdWo' : 1, 'MnWw': 1,'NA': 0}
 
     df["Fence"] = df.replace({'Fence': Fence_mapping})["Fence"]
 
@@ -89,9 +89,9 @@ def prepare_data(df):
     df["nearEWR"] = df.replace({'Condition1': nearEWR_mapping})["Condition1"]
     #df["nearEWR2"] = df.replace({'Condition2': nearEWR_mapping})["Condition2"]
 
-    Functional_mapping = {'Typ': 8, 'Min1': 7, 'Min2': 6,
-                          'Mod': 5, 'Maj1': 4, 'Maj2': 3,
-                          'Sev': 2, 'Sal': 1}
+    Functional_mapping = {'Typ': 3, 'Min1': 2, 'Min2': 2,
+                          'Mod': 2, 'Maj1': 1, 'Maj2': 1,
+                          'Sev': 1, 'Sal': 1}
 
     df["Functional"] = df.replace({'Functional': Functional_mapping})["Functional"]
 
@@ -99,8 +99,8 @@ def prepare_data(df):
 
     # df["roof"] = df["RoofStyle"]
 
-    BsmtFinType1_mapping = {'GLQ': 6,  'ALQ': 5, 'BLQ': 4,
-                            'Rec': 3,  'LwQ': 2, 'Unf': 1,
+    BsmtFinType1_mapping = {'GLQ': 3,  'ALQ': 2, 'BLQ': 2,
+                            'Rec': 1,  'LwQ': 1, 'Unf': 1,
                             'NA' : 0}
 
     BsmtFinType2_mapping = BsmtFinType1_mapping
@@ -115,8 +115,8 @@ def prepare_data(df):
 
 
 
-    BsmtCond_mapping = {'Ex': 5, 'Gd': 4, 'TA': 3,
-                        'Fa': 2, 'Po': 1, 'NA': 0}
+    BsmtCond_mapping = {'Ex': 3, 'Gd': 2, 'TA': 1,
+                        'Fa': 1, 'Po': 1, 'NA': 0}
 
     BsmtQual__mapping = BsmtCond_mapping
 
@@ -139,17 +139,17 @@ def prepare_data(df):
 
     df["baths"] = df['FullBath'] + df['HalfBath']
 
-    FireplaceQu_mapping = {'Ex': 5, 'Gd': 4, 'TA': 3,
-                           'Fa': 2, 'Po': 1, 'NA': 0}
+    FireplaceQu_mapping = {'Ex': 3, 'Gd': 2, 'TA': 2,
+                           'Fa': 1, 'Po': 1, 'NA': 0}
 
     df["FireplaceQu"] = df.replace({'FireplaceQu': FireplaceQu_mapping})["FireplaceQu"]
 
-    LandContour_mapping = {'Lvl': 4, 'Bnk': 2, 'HLS': 1, 'Low': 1}
+    LandContour_mapping = {'Lvl': 3, 'Bnk': 2, 'HLS': 1, 'Low': 1}
     df["LandContour"] = df.replace({'LandContour' : LandContour_mapping})["LandContour"]
 
     df["fire_places_grade"] = df["Fireplaces"] * df['FireplaceQu']
 
-    PoolQC_mapping = {'Ex': 4, 'Gd': 3, 'TA': 2,
+    PoolQC_mapping = {'Ex': 3, 'Gd': 2, 'TA': 1,
                       'Fa': 1, 'NA': 0}
 
     df["PoolQC_grade"] = df.replace({'PoolQC': PoolQC_mapping})["PoolQC"] * \
@@ -166,19 +166,19 @@ def prepare_data(df):
     PavedDrive_mapping = {'Y': 2, 'P': 1, 'N': 0}
     df["PavedDrive"] = df.replace({'PavedDrive': PavedDrive_mapping})["PavedDrive"]
 
-    HeatingQC_mapping = {'Ex': 5, 'Gd': 4, 'TA': 3,
-                         'Fa': 2, 'Po': 1, 'NA': 0}
+    HeatingQC_mapping = {'Ex': 3, 'Gd': 2, 'TA': 1,
+                         'Fa': 1, 'Po': 1, 'NA': 0}
     df["HeatingQC"] = df.replace({'HeatingQC': HeatingQC_mapping})["HeatingQC"]
 
     GarageFinish_mapping = {'Fin': 3, 'RFn': 2, 'Unf': 1, 'NA': 0}
     df["GarageFinish"] = df.replace({'GarageFinish': GarageFinish_mapping})["GarageFinish"]
 
-    GarageQual_mapping = {'Ex': 5, 'Gd': 4, 'TA': 3,
-                          'Fa': 2, 'Po': 1, 'NA': 0}
+    GarageQual_mapping = {'Ex': 3, 'Gd': 2, 'TA': 1,
+                          'Fa': 1, 'Po': 1, 'NA': 0}
     df["GarageQual"] = df.replace({'GarageQual': GarageQual_mapping})["GarageQual"]
 
-    GarageCond_mapping = {'Ex': 5, 'Gd': 4, 'TA': 3,
-                          'Fa': 2, 'Po': 1, 'NA': 0}
+    GarageCond_mapping = {'Ex': 3, 'Gd': 2, 'TA': 1,
+                          'Fa': 1, 'Po': 1, 'NA': 0}
     df["GarageCond"] = df.replace({'GarageCond': GarageCond_mapping})["GarageCond"]
 
 

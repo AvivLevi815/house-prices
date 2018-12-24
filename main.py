@@ -24,17 +24,32 @@ train_df = feature_engineering.prepare_data(train_df)
 test_df = feature_engineering.prepare_data(test_df)
 
 # print(list(test_df))
-data_visual.show_all_instances(train_df, "LandSlope")
+# data_visual.show_all_instances(train_df, "Kitchens")
 
 # removing extreme records.
 
-print(list(train_df))
 train_df = train_df.drop(train_df[train_df.total_area > 8000].index)
-
-#print(train_df)
-train_df = train_df.drop(train_df[train_df.BsmtGrade > 45000].index)
 train_df = train_df.drop(train_df[train_df.externy_grade > 9000].index)
 train_df = train_df.drop(train_df[train_df.total_area > 8000].index)
+train_df = train_df.drop(train_df[train_df.MiscVal > 8000].index)
+train_df = train_df.drop(train_df[train_df.basement_finish_grade > 30000].index)
+train_df = train_df.drop(train_df[train_df.BsmtGrade > 80000].index)
+train_df = train_df.drop(train_df[train_df.fire_places_grade >= 12].index)
+train_df = train_df.drop(train_df[train_df.Garage_Grade > 10000].index)
+train_df = train_df.drop(train_df[train_df.Garage_Grade >= 8].index)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # get target column
 target = train_df["SalePrice"]
