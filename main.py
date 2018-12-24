@@ -23,6 +23,11 @@ test_id = test_df["Id"]
 train_df = feature_engineering.prepare_data(train_df)
 test_df = feature_engineering.prepare_data(test_df)
 
+#find high-correlated features:
+corr = train_df.corr()
+corr.sort_values(["SalePrice"], ascending = False, inplace = True)
+#print(corr.SalePrice)
+
 # print(list(test_df))
 # data_visual.show_all_instances(train_df, "Kitchens")
 

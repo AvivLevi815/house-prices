@@ -194,6 +194,40 @@ def prepare_data(df):
 
     df["Kitchens"] = df["KitchenQual"] * df["KitchenAbvGr"]
 
+    # creating second and third degree polynomials for top 10 highly correlated features.
+    df["total_areaP2"] =  df["total_area"] ** 2
+    df["total_areaP3"] =  df["total_area"] ** 3
+
+    df["Garage_GradeP2"] =  df["Garage_Grade"] ** 2
+    df["Garage_GradeP3"] =  df["Garage_Grade"] ** 3
+
+    df["BsmtGradeP2"] = df["BsmtGrade"] ** 2
+    df["BsmtGradeP3"] = df["BsmtGrade"] ** 3
+
+    df["KitchensP2"] = df["Kitchens"] ** 2
+    df["KitchensP3"] = df["Kitchens"] ** 3
+
+    df["bathsP2"] = df["baths"] ** 2
+    df["bathsP3"] = df["baths"] ** 3
+
+    df["Cond_QualP2"] = df["Cond_Qual"] ** 2
+    df["Cond_QualP3"] = df["Cond_Qual"] ** 3
+
+    df["externy_gradeP2"] = df["externy_grade"] ** 2
+    df["externy_gradeP3"] = df["externy_grade"] ** 3
+
+    df["TotRmsAbvGrdP2"] = df["TotRmsAbvGrd"] ** 2
+    df["TotRmsAbvGrdP3"] = df["TotRmsAbvGrd"] ** 3
+
+    df["fire_places_gradeP2"] = df["fire_places_grade"] ** 2
+    df["fire_places_gradeP3"] = df["fire_places_grade"] ** 3
+
+    df["HeatingQCP2"] = df["HeatingQC"] ** 2
+    df["HeatingQCP3"] = df["HeatingQC"] ** 3
+
+
+
+
     # removing unwanted features and features I engineered into one.
     df.drop(['Id', 'GarageArea', 'GarageCond', 'GarageQual', 'GarageFinish',
                    'GarageYrBlt', "EnclosedPorch", "3SsnPorch", "ScreenPorch", "OverallCond",
