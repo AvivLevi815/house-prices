@@ -26,10 +26,6 @@ test_id = test_df["Id"]
 train_df = feature_engineering.prepare_data(train_df)
 test_df = feature_engineering.prepare_data(test_df)
 
-#find high-correlated features:
-corr = train_df.corr()
-corr.sort_values(["SalePrice"], ascending = False, inplace = True)
-#print(corr.SalePrice)
 
 # print(list(test_df))
 # data_visual.show_all_instances(train_df, "Kitchens")
@@ -44,10 +40,17 @@ train_df = train_df.drop(train_df[train_df.basement_finish_grade > 30000].index)
 train_df = train_df.drop(train_df[train_df.BsmtGrade > 80000].index)
 train_df = train_df.drop(train_df[train_df.fire_places_grade >= 12].index)
 train_df = train_df.drop(train_df[train_df.Garage_Grade > 10000].index)
-train_df = train_df.drop(train_df[train_df.Garage_Grade >= 8].index)
 
-# Log transform the target for official scoring
-#train_df.SalePrice = np.log1p(train_df.SalePrice)
+# Create correlation matrix
+corr_matrix = train_df.corr().SalePrice.abs()
+
+#drop low correlated features
+to_drop = [feature for feature, val in corr_matrix.items() if corr_matrix[feature] < 0.5]
+
+# Drop features
+train_df.drop(to_drop, axis=1, inplace=True)
+test_df.drop(to_drop, axis=1, inplace=True)
+
 
 # get target column
 target = train_df["SalePrice"]
@@ -65,16 +68,6 @@ train_num = train_df[numerical_features]
 # get all categoricall (object features)
 categorical_features = train_df.select_dtypes(include = ["object"]).columns
 train_cat = train_df[categorical_features]
-
-
-#skew function
-# skewness = train_num.apply(lambda x: skew(x))
-# skewness = skewness[abs(skewness) > 0.5]
-# skewed_features = skewness.index
-
-
-# train_num[skewed_features] = np.where(train_num[skewed_features]>0, np.log1p(train_num[skewed_features]), train_num[skewed_features])
-
 
 # re-combine numerical and categorical features
 # train_df = pd.concat([train_num, train_cat], axis = 1)
