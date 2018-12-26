@@ -3,6 +3,9 @@ import feature_engineering
 from sklearn.linear_model import LinearRegression
 import numpy as np
 import csv
+from scipy.stats import skew
+pd.options.display.max_rows = 9999
+
 import data_visual
 
 pd.set_option('display.expand_frame_repr', False)
@@ -43,18 +46,8 @@ train_df = train_df.drop(train_df[train_df.fire_places_grade >= 12].index)
 train_df = train_df.drop(train_df[train_df.Garage_Grade > 10000].index)
 train_df = train_df.drop(train_df[train_df.Garage_Grade >= 8].index)
 
-
-
-
-
-
-
-
-
-
-
-
-
+# Log transform the target for official scoring
+#train_df.SalePrice = np.log1p(train_df.SalePrice)
 
 # get target column
 target = train_df["SalePrice"]
@@ -65,8 +58,29 @@ train_df.drop(['SalePrice'], axis=1, inplace=True)
 # fixing value dieffrences after one-hot encoding.
 feature_engineering.add_missing_dummy_columns(train_df, test_df)
 
-# train model
+# get all numerical (non-object features)
+numerical_features = train_df.select_dtypes(exclude = ["object"]).columns
+train_num = train_df[numerical_features]
 
+# get all categoricall (object features)
+categorical_features = train_df.select_dtypes(include = ["object"]).columns
+train_cat = train_df[categorical_features]
+
+
+#skew function
+# skewness = train_num.apply(lambda x: skew(x))
+# skewness = skewness[abs(skewness) > 0.5]
+# skewed_features = skewness.index
+
+
+# train_num[skewed_features] = np.where(train_num[skewed_features]>0, np.log1p(train_num[skewed_features]), train_num[skewed_features])
+
+
+# re-combine numerical and categorical features
+# train_df = pd.concat([train_num, train_cat], axis = 1)
+
+
+# train model
 linereg = LinearRegression()
 linereg.fit(train_df, target)
 
