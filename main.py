@@ -35,6 +35,7 @@ test_df = feature_engineering.prepare_data(test_df)
 
 # fixing value dieffrences after one-hot encoding.
 feature_engineering.add_missing_dummy_columns(train_df, test_df)
+print(test_df)
 
 
 # print(list(test_df))
@@ -53,13 +54,17 @@ train_df = train_df.drop(train_df[train_df.Garage_Grade > 10000].index)
 
 
 # seperate numerical and categorial features
-numerical_features = train_df.select_dtypes(exclude = ["object"]).columns
-train_num = train_df[numerical_features]
-test_num = test_df[numerical_features]
+train_numerical_features = train_df.select_dtypes(exclude = ["object"]).columns
+test_numerical_features = test_df.select_dtypes(exclude = ["object"]).columns
 
-categorical_features = train_df.select_dtypes(include = ["object"]).columns
-train_cat = train_df[categorical_features]
-test_cat = test_df[categorical_features]
+train_num = train_df[train_numerical_features]
+test_num = test_df[test_numerical_features]
+
+train_categorical_features = train_df.select_dtypes(include = ["object"]).columns
+test_categorical_features = test_df.select_dtypes(include = ["object"]).columns
+
+train_cat = train_df[train_categorical_features]
+test_cat = test_df[test_categorical_features]
 
 # Create correlation matrix
 corr_matrix = train_num.corr().SalePrice.abs()
@@ -71,23 +76,21 @@ to_drop = [feature for feature, val in corr_matrix.items() if (corr_matrix[featu
 train_num.drop(to_drop, axis=1, inplace=True)
 test_num.drop(to_drop, axis=1, inplace=True)
 
-
 # get target column
 target = train_df["SalePrice"]
-
-print("train : ")
-print(list(train_df))
-print("test : ")
-print(list(test_df))
-
-
-# removing target column from train DataFrame.
-train_df.drop(['SalePrice'], axis=1, inplace=True)
 
 # re-combine numerical and categorical features
 # train_df = pd.concat([train_num, train_cat], axis = 1)
 train_final = pd.concat([train_num, train_cat], axis=1)
 test_final = pd.concat([test_num,test_cat], axis=1)
+
+print("train : ")
+print(list(train_final))
+print("test : ")
+print(list(test_final))
+
+# removing target column from train DataFrame.
+train_final.drop(['SalePrice'], axis=1, inplace=True)
 
 # train model
 linereg = LinearRegression()
