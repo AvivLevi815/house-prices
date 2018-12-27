@@ -1,5 +1,5 @@
 import numpy as np
-
+import pandas as pd
 
 # fixing value dieffrences after one-hot encoding.
 def add_missing_dummy_columns(train_df ,test_df):
@@ -26,11 +26,13 @@ def prepare_data(df):
     #df.mode - retunrns the most frequent value.
 
     df = df.replace(np.nan, df.mode().iloc[0])
-
-    # cols_to_transform = ['MSZoning', 'BldgType', 'Foundation',
-    #                      'Neighborhood', 'HouseStyle', 'RoofStyle',
-    #                      'RoofStyle', 'RoofMatl', 'MasVnrType',
-    #                      'Heating', 'GarageType']
+    #
+    # cols_to_transform = ['RoofStyle']
+    #         # BldgType, '', 'Foundation',
+    #         #              'RoofMatl', 'MSZoning',
+    #         #              'HouseStyle',
+    #         #              'Heating', 'GarageType'] #  'Neighborhood','MasVnrType',
+    #
     # df = pd.get_dummies(df, columns=cols_to_transform)
 
     """
@@ -238,9 +240,10 @@ def prepare_data(df):
                    'Exterior1st', 'Exterior2nd', 'Electrical', 'GarageCars',
                    'OpenPorchSF', 'MiscFeature', 'MoSold', 'SaleType', 'SaleCondition',
                    'KitchenQual', 'KitchenAbvGr', 'Fireplaces', 'FireplaceQu',
-                   'MSZoning', 'BldgType', 'Foundation',
-                   'Neighborhood', 'HouseStyle', 'RoofStyle',
-                   'RoofStyle', 'RoofMatl', 'MasVnrType',
-                   'Heating', 'GarageType',
+                   'MasVnrType',
+                   'RoofStyle',
+                   'Foundation', 'RoofMatl','BldgType',
+                   'MSZoning', 'HouseStyle','Heating','GarageType',
+                   'Neighborhood',
                    'WoodDeckSF', 'Condition1', 'Condition2', 'FullBath', 'HalfBath'], axis=1, inplace=True)
     return df
