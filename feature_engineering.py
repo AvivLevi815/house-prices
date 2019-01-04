@@ -2,12 +2,11 @@ import numpy as np
 import pandas as pd
 
 # fixing value dieffrences after one-hot encoding.
-# def add_missing_dummy_columns(train_df ,test_df):
-#     missing_cols = set( train_df ) - set( test_df.columns )
-#     missing_cols.remove("SalePrice")
-#     for c in missing_cols:
-#         test_df[c] = 0
-#
+def add_missing_dummy_columns(train_df ,test_df):
+    missing_cols = set( train_df ) - set( test_df.columns )
+    for c in missing_cols:
+        test_df[c] = 0
+
 
 # mission specific data engineering.
 def prepare_data(df):
@@ -241,8 +240,8 @@ def prepare_data(df):
                    'OpenPorchSF', 'MiscFeature', 'MoSold', 'SaleType', 'SaleCondition',
                    'KitchenQual', 'KitchenAbvGr', 'Fireplaces', 'FireplaceQu',
                    'MasVnrType',
-                   'Foundation', 'RoofMatl','BldgType','RoofStyle',
-                   'MSZoning', 'HouseStyle','Heating','GarageType',
+                   # 'Foundation', 'RoofMatl','BldgType','RoofStyle',
+                   # 'MSZoning', 'HouseStyle','Heating','GarageType',
                    'Neighborhood',
                    'WoodDeckSF', 'Condition1', 'Condition2', 'FullBath', 'HalfBath'], axis=1, inplace=True)
     return df
