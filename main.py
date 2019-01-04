@@ -59,7 +59,7 @@ target = np.log1p(train_df["SalePrice"])
 train_df.drop(['SalePrice'], axis=1, inplace=True)
 
 # fixing value dieffrences after one-hot encoding.
-feature_engineering.add_missing_dummy_columns(train_df, test_df)
+#feature_engineering.add_missing_dummy_columns(train_df, test_df)
 
 # get all numerical (non-object features)
 numerical_features = train_df.select_dtypes(exclude = ["object"]).columns
