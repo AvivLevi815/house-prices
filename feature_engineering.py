@@ -1,13 +1,5 @@
 import numpy as np
-import pandas as pd
 
-# fixing value dieffrences after one-hot encoding.
-# def add_missing_dummy_columns(train_df ,test_df):
-#     missing_cols = set( train_df ) - set( test_df.columns )
-#     missing_cols.remove("SalePrice")
-#     for c in missing_cols:
-#         test_df[c] = 0
-#
 
 # mission specific data engineering.
 def prepare_data(df):
@@ -27,13 +19,6 @@ def prepare_data(df):
     #df.mode - retunrns the most frequent value.
 
     df = df.replace(np.nan, df.mode().iloc[0])
-
-    # cols_to_transform = ['RoofStyle', 'HouseStyle',
-    #                      'BldgType',  'Foundation',
-    #                      'RoofMatl',  'MSZoning'  ,
-    #                      'Heating', 'GarageType'  ] #  'Neighborhood','MasVnrType'
-    #
-    # df = pd.get_dummies(df, columns=cols_to_transform)
 
     """
     Dictionary mapping - 
@@ -65,8 +50,6 @@ def prepare_data(df):
 
     df["nearNSR"] = df.replace({'Condition1': nearNSR_mapping})["Condition1"]
 
-
-
     Alley_mapping = {'Pave': 2, 'Grvl' : 1, 'NA': 0}
     df["Alley"] = df.replace({'Alley': Alley_mapping})["Alley"]
 
@@ -75,21 +58,17 @@ def prepare_data(df):
 
     df["Fence"] = df.replace({'Fence': Fence_mapping})["Fence"]
 
-    #df["nearNSR2"] = df.replace({'Condition2': nearNSR_mapping})["Condition2"]
-
     posOS_mapping = {'Artery': 0, 'Feedr': 0, 'Norm': 0,
                      'RRNn': 0, 'RRAn': 0, 'PosN': 1,
                      'PosA': 2, 'RRNe': 0, 'RRAe': 0}
 
     df["posOS"] = df.replace({'Condition1': posOS_mapping})["Condition1"]
-    #df["posOS2"] = df.replace({'Condition2': posOS_mapping})["Condition2"]
 
     nearEWR_mapping = {'Artery': 0, 'Feedr': 0, 'Norm': 0,
                        'RRNn': 0, 'RRAn': 0, 'PosN': 0,
                        'PosA': 0, 'RRNe': 1, 'RRAe': 2}
 
     df["nearEWR"] = df.replace({'Condition1': nearEWR_mapping})["Condition1"]
-    #df["nearEWR2"] = df.replace({'Condition2': nearEWR_mapping})["Condition2"]
 
     Functional_mapping = {'Typ': 3, 'Min1': 2, 'Min2': 2,
                           'Mod': 2, 'Maj1': 1, 'Maj2': 1,
@@ -98,8 +77,6 @@ def prepare_data(df):
     df["Functional"] = df.replace({'Functional': Functional_mapping})["Functional"]
 
     df["age"] = df["YrSold"] - df["YearBuilt"]
-
-    # df["roof"] = df["RoofStyle"]
 
     BsmtFinType1_mapping = {'GLQ': 3,  'ALQ': 2, 'BLQ': 2,
                             'Rec': 1,  'LwQ': 1, 'Unf': 1,
@@ -122,7 +99,6 @@ def prepare_data(df):
     df["BsmtGrade"] = df.replace({'BsmtCond': BsmtCond_mapping})["BsmtCond"] * \
                       df.replace({'BsmtQual': BsmtQual__mapping})["BsmtQual"] * \
                             df['TotalBsmtSF']
-
 
     ExterQual_mapping = BsmtCond_mapping
     df["ExterQual"] = df.replace({'ExterQual': ExterQual_mapping})["ExterQual"]
@@ -180,8 +156,6 @@ def prepare_data(df):
                           'Fa': 1, 'Po': 1, 'NA': 0}
     df["GarageCond"] = df.replace({'GarageCond': GarageCond_mapping})["GarageCond"]
 
-
-
     df["Garage_Grade"] = df["GarageArea"] *  (df["GarageCond"] +
                                               df["GarageQual"] +
                                               df["GarageFinish"])
@@ -192,40 +166,6 @@ def prepare_data(df):
     df["KitchenQual"] = df.replace({'KitchenQual': KitchenQual_mapping})["KitchenQual"]
 
     df["Kitchens"] = df["KitchenQual"] * df["KitchenAbvGr"]
-
-    # creating second and third degree polynomials for top 10 highly correlated features.
-    # df["total_areaP2"] =  df["total_area"] ** 2
-    # df["total_areaP3"] =  df["total_area"] ** 3
-    #
-    # df["Garage_GradeP2"] =  df["Garage_Grade"] ** 2
-    # df["Garage_GradeP3"] =  df["Garage_Grade"] ** 3
-    #
-    # df["BsmtGradeP2"] = df["BsmtGrade"] ** 2
-    # df["BsmtGradeP3"] = df["BsmtGrade"] ** 3
-    #
-    # df["KitchensP2"] = df["Kitchens"] ** 2
-    # df["KitchensP3"] = df["Kitchens"] ** 3
-    #
-    # df["bathsP2"] = df["baths"] ** 2
-    # df["bathsP3"] = df["baths"] ** 3
-
-    # df["Cond_QualP2"] = df["Cond_Qual"] ** 2
-    # #df["Cond_QualP3"] = df["Cond_Qual"] ** 3
-    #
-    # df["externy_gradeP2"] = df["externy_grade"] ** 2
-    # #df["externy_gradeP3"] = df["externy_grade"] ** 3
-    #
-    # df["TotRmsAbvGrdP2"] = df["TotRmsAbvGrd"] ** 2
-    # #df["TotRmsAbvGrdP3"] = df["TotRmsAbvGrd"] ** 3
-    #
-    # df["fire_places_gradeP2"] = df["fire_places_grade"] ** 2
-    # #df["fire_places_gradeP3"] = df["fire_places_grade"] ** 3
-    #
-    # df["HeatingQCP2"] = df["HeatingQC"] ** 2
-    # #df["HeatingQCP3"] = df["HeatingQC"] ** 3
-    #
-
-
 
     # removing unwanted features and features I engineered into one.
     df.drop(['Id', 'GarageArea', 'GarageCond', 'GarageQual', 'GarageFinish',
@@ -241,8 +181,8 @@ def prepare_data(df):
                    'OpenPorchSF', 'MiscFeature', 'MoSold', 'SaleType', 'SaleCondition',
                    'KitchenQual', 'KitchenAbvGr', 'Fireplaces', 'FireplaceQu',
                    'MasVnrType',
-                   'Foundation', 'RoofMatl','BldgType','RoofStyle',
-                   'MSZoning', 'HouseStyle','Heating','GarageType',
+                   'Foundation', 'RoofMatl', 'BldgType', 'RoofStyle',
+                   'MSZoning', 'HouseStyle', 'Heating', 'GarageType',
                    'Neighborhood',
                    'WoodDeckSF', 'Condition1', 'Condition2', 'FullBath', 'HalfBath'], axis=1, inplace=True)
     return df
